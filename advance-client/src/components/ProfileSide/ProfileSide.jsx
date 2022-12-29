@@ -1,6 +1,7 @@
 import React from 'react'
 import LogoSearch from '../LogoSearch/LogoSearch'
 import ProfileCard from '../ProfileCard/ProfileCard'
+import FollowersCard from '../FollowersCard/FollowersCard'
 import "./ProfileSide.css"
 
 export default function ProfileSide() {
@@ -8,5 +9,6 @@ export default function ProfileSide() {
 <div className="ProfileSide">
   <LogoSearch/>
   <ProfileCard/>
+  <FollowersCard/>
 </div>  )
 }
