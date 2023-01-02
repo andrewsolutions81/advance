@@ -86,3 +86,7 @@
   height: 2rem;
   align-self: flex-end;
 }
+
+::-webkit-scrollbar{
+  display: none;
+}
