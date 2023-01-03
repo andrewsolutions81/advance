@@ -19,3 +19,13 @@
   align-items: flex-start;
   gap:1rem;
 }
+
+.postReact>img{
+  height: 1em;
+  width: 1em;
+}
+
+.post-likes{
+  color: var(--gray);
+  font-size: 20px;
+}

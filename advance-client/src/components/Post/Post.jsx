@@ -15,7 +15,7 @@ export default function Post({data}) {
         <img src={Comment} alt="comment icon" />
         <img src={Share} alt="share icon" />
       </div>
-      <span>{data.likes} Likes</span>
+      <span className='post-likes'>{data.likes} Likes</span>
       <div className="detail">
         <span><b>{data.name}</b></span>
         <span> {data.desc}</span>
