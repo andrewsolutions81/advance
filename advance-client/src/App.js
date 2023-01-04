@@ -9,8 +9,8 @@ function App() {
       <div className='blur' style={{top: '-18%', right: '0'}}></div>
       <div className='blur' style={{top: '-35%', right: '-7rem'}}></div>
       {/* <Home /> */}
-      {/* <Profile/> */}
-      <Auth/>
+      <Profile/>
+      {/* <Auth/> */}
     </div>
   );
 }
