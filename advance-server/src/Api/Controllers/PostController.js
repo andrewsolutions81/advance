@@ -21,14 +21,14 @@ export const  getPost = async(req,res) =>{
 
     res.status(200).json({message:"✅ post found:", post:postQuery})
   } catch (error) {
-    req.status(500).json({message:"❌ post could not be found", error:error.message})
+    res.status(500).json({message:"❌ post could not be found", error:error.message})
   }
 }
 
 /* get multiple posts */
 export const getAllPosts= async (req, res) => {
   try {
-    let posts = await PostModel.find();
+    const posts = await PostModel.find();
     res.status(200).json({message: "✅ multiple posts found.",posts:posts});
   } catch (error) {
     res.status(500).json({message: "❌ multipe posts not found:", error: error.message});
@@ -69,5 +69,25 @@ export const deletePost = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({message:"❌ post could not be deleted",error:error.message});
+  }
+};
+
+/* like & dislike post */
+export const likePost = async (req, res) => {
+  try {
+  const id = req.params.id;
+  const { userId } = req.body;
+    const post = await PostModel.findById(id);
+    if (post.likes.includes(userId)) {
+      await post.updateOne({ $pull: { likes: userId } });
+      const likedDislikedpost = await PostModel.findById(id)
+      res.status(200).json({message:"✅ Post disliked 👎", post:likedDislikedpost});
+    } else {
+      await post.updateOne({ $push: { likes: userId } });
+      const likedDislikedpost = await PostModel.findById(id)
+      res.status(200).json({message:"✅ Post liked 👍",post:likedDislikedpost});
+    }
+  } catch (error) {
+    res.status(500).json({message:"❌ post could not be like/disliked:", error:error.message});
   }
 };
