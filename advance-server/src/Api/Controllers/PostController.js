@@ -13,7 +13,7 @@ export const createPost = async (req, res)=> {
   }
 };
 
-/* get a post */
+/* get a single post */
 export const  getPost = async(req,res) =>{
   try {
     const postForQueryId = req.params.id
@@ -24,6 +24,16 @@ export const  getPost = async(req,res) =>{
     req.status(500).json({message:"❌ post could not be found", error:error.message})
   }
 }
+
+/* get multiple posts */
+export const getAllPosts= async (req, res) => {
+  try {
+    let posts = await PostModel.find();
+    res.status(200).json({message: "✅ multiple posts found.",posts:posts});
+  } catch (error) {
+    res.status(500).json({message: "❌ multipe posts not found:", error: error.message});
+  }
+};
 
 /* update post */
 export const updatePost = async (req, res) => {
@@ -43,4 +53,21 @@ export const updatePost = async (req, res) => {
     res.status(500).json({message:"❌ post could not be updated:", error:error.message})
   }
 };
-//
+
+/* delete post */
+export const deletePost = async (req, res) => {
+  try {
+  const id = req.params.id;
+  const { userId } = req.body;
+
+    const post = await PostModel.findById(id);
+    if (post.userId === userId) {
+      const deletedPost = await post.deleteOne();
+      res.status(200).json({message:"✅Post deleted.",deletedPost:deletedPost});
+    } else {
+      res.status(403).json({message:"❌Action forbidden"});
+    }
+  } catch (error) {
+    res.status(500).json({message:"❌ post could not be deleted",error:error.message});
+  }
+};
