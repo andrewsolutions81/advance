@@ -66,4 +66,12 @@
 
 .login-text{
   font-size: 12px;
+  cursor: pointer;
+}
+
+.password-confirmation{
+  color: red;
+  font-size: 12px;
+  align-self: flex-end;
+  margin-right: 5px;
 }

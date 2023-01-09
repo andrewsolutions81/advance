@@ -2,7 +2,7 @@ import React from 'react'
 import "./TrendCard.css"
 
 import { TrendData } from "../../Data/TrendData.js"
-console.log("🚀 ~ file: TrendCard.jsx:5 ~ TrendData", TrendData)
+
 export default function TrendCard() {
   return (
     <div className="TrendCard">
