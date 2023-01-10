@@ -1,36 +1,30 @@
 import UserModel from "../Models/userModel.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 /* create-post new user */
 export const registerUser = async (req, res) => {
   try {
-    const { username, password, firstname, lastname } = req.body;
+    const salt = await bcrypt.genSalt(11);
+    const hashedPass = await bcrypt.hash(req.body.password, salt);
+    req.body.password = hashedPass;
+    const newUser = new UserModel(req.body);
+    const { username } = req.body;
 
-    if (!username) {
-      throw new Error("user name needed");
-    }
-    if (!password) {
-      throw new Error("Password needed");
-    }
-    if (!firstname) {
-      throw new Error("first name needed");
-    }
-    if (!lastname) {
-      throw new Error("last name needed");
-    }
+    const oldUser = await UserModel.findOne({ username });
 
-    const salt = await bcrypt.genSalt(11); //Password Encription
-    const hashedPass = await bcrypt.hash(password, salt);
+    if (oldUser)
+      return res.status(400).json({ message: "User already exists" });
 
-    const newUser = new UserModel({
-      username,
-      password: hashedPass,
-      firstname,
-      lastname,
-    });
-    await newUser.save();
+    const user = await newUser.save();
 
-    return res.status(201).json({ message: "✅ user created.", info: newUser });
+    const token = jwt.sign(
+      { username: user.username, id: user._id },
+      process.env.JWT_KEY,
+      { expiresIn: "24h" }
+    );
+
+    res.status(200).json({ user, token });
   } catch (error) {
     res
       .status(500)
@@ -46,9 +40,16 @@ export const loginUser = async (req, res) => {
     if (user) {
       const validity = await bcrypt.compare(password, user.password);
 
-      validity
-        ? res.status(200).json({ message: "✅ user loged in.", info: user })
-        : res.status(400).json({ message: "❌ wrong credentials." });
+      if (!validity) {
+        res.status(404).json("❌ wrong password.");
+      } else {
+        const token = jwt.sign(
+          { username: user.username, id: user._id },
+          process.env.JWT_KEY,
+          { expiresIn: "24h" }
+        );
+        res.status(200).json({ user, token });
+      }
     } else {
       res.status(404).json({ message: "❌ user not found." });
     }
