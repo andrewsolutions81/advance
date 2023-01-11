@@ -20,8 +20,8 @@ export default function ProfileCard() {
         />
       </main>
       <div className="ProfileName">
-        <span className="UserName">Juliana MA</span>
-        <span className="UserPosition">Save a cat CEO</span>
+        <span className="UserName">Andres Berrio</span>
+        <span className="UserPosition">Make It Real</span>
       </div>
 
       <div className="followStatus">

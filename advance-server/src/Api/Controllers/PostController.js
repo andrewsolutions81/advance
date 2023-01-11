@@ -7,7 +7,7 @@ export const createPost = async (req, res) => {
   const newPost = new PostModel(req.body);
   try {
     await newPost.save();
-    res.status(201).json({ message: "✅ post created!", post: newPost });
+    res.status(201).json(newPost);
   } catch (error) {
     res
       .status(500)
@@ -20,7 +20,6 @@ export const getPost = async (req, res) => {
   try {
     const postForQueryId = req.params.id;
     const postQuery = await PostModel.findById(postForQueryId);
-
     res.status(200).json({ message: "✅ post found:", post: postQuery });
   } catch (error) {
     res

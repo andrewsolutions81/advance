@@ -4,7 +4,7 @@ import "./FollowersCard.css";
 
 export default function FollowersCard() {
   return (
-    <div className="FollowersCard">
+    <div className="FollowersCard" >
       <h3>Followers</h3>
       {Followers.map((follower, id) => {
         return (
