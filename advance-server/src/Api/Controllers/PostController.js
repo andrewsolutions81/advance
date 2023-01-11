@@ -91,24 +91,13 @@ export const likePost = async (req, res) => {
     const post = await PostModel.findById(id);
     if (post.likes.includes(userId)) {
       await post.updateOne({ $pull: { likes: userId } });
-      const likedDislikedpost = await PostModel.findById(id);
-      res
-        .status(200)
-        .json({ message: "✅ Post disliked 👎", post: likedDislikedpost });
+      res.status(200).json("Post disliked");
     } else {
       await post.updateOne({ $push: { likes: userId } });
-      const likedDislikedpost = await PostModel.findById(id);
-      res
-        .status(200)
-        .json({ message: "✅ Post liked 👍", post: likedDislikedpost });
+      res.status(200).json("Post liked");
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "❌ post could not be like/disliked:",
-        error: error.message,
-      });
+    res.status(500).json("likePost postController error:", error);
   }
 };
 
@@ -144,7 +133,7 @@ export const getTimelinePosts = async (req, res) => {
       .concat(...followingPosts[0].followingPosts)
       .sort((a, b) => {
         return new Date(b.createdAt) - new Date(a.createdAt);
-      })
+      });
     res.status(200).json(recentPosts);
   } catch (error) {
     res
