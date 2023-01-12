@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost } from "../../redux/actions/uploadAction";
-import ProfileImage from "../../img/profileImg.jpg";
 import PhotoIcon from "../../img/photo-icon.png";
 import VideoIcon from "../../img/video-icon.png";
 import LocationIcon from "../../img/location-icon.png";
@@ -15,6 +14,8 @@ const PostShare = () => {
   const imageRef = useRef()
   const { user } = useSelector((state) => state.authReducer.authData);
   const desc = useRef()
+  // const $url = "http://localhost:8080/images/"
+  const $url = process.env.REACT_APP_PUBLIC_FOLDER
 
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -56,7 +57,7 @@ const PostShare = () => {
 
   return (
     <div className="PostShare">
-      <img src={ProfileImage} alt="user pic" className="PostShareImage" />
+      <img src={user.coverPicture?$url+user.profilePicture : $url + "user-icon.png"} alt="user pic" className="PostShareImage" />
       <div className="PostShareInput">
         <input type="text" placeholder="Show your advance!"
         ref={desc}

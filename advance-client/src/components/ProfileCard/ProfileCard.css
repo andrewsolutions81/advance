@@ -89,3 +89,8 @@
     margin-bottom: 1rem;
     cursor: pointer;
 }
+
+.my-profile{
+  text-decoration: none;
+  color: purple;
+}

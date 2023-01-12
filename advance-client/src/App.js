@@ -29,6 +29,10 @@ function App() {
             path="/profile/:id"
             element={user ? <Profile /> : <Navigate to="../auth" />}
           />
+          <Route
+            path="/profile/:id"
+            element={user ? <Profile /> : <Navigate to="../auth" />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
