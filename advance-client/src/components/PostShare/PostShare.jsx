@@ -14,7 +14,6 @@ const PostShare = () => {
   const imageRef = useRef()
   const { user } = useSelector((state) => state.authReducer.authData);
   const desc = useRef()
-  // const $url = "http://localhost:8080/images/"
   const $url = process.env.REACT_APP_PUBLIC_FOLDER
 
   const onImageChange = (e) => {

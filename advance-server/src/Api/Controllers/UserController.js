@@ -1,21 +1,22 @@
 import UserModel from "../Models/userModel.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 /* get single user */
 export const getUser = async (req, res) => {
   const id = req.params.id;
+
   try {
     const user = await UserModel.findById(id);
-    if (!user) {
-      res.status(404).json({ message: "❌ user not found." });
-    } else {
+    if (user) {
       const { password, ...otherDetails } = user._doc;
-      res.status(200).json({ message: "✅ user found.", info: otherDetails });
+
+      res.status(200).json(otherDetails);
+    } else {
+      res.status(404).json("no user found");
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "❌ user not found:", error: error.message });
+    res.status(500).json(error);
   }
 };
 
@@ -23,40 +24,45 @@ export const getUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     let users = await UserModel.find();
-    users = users.map((user)=>{
-      const {password, ...otherDetails} = user._doc
-      return otherDetails
-    })
-    res.status(200).json({message: "✅ multiple users found",users:users});
+    users = users.map((user) => {
+      const { password, ...otherDetails } = user._doc;
+      return otherDetails;
+    });
+    res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({message: "❌ multipe users not found:", error: error.message});
+    res.status(500).json("❌UserController -> getAllUsers", error);
   }
 };
 
 /* update user */
 export const updateUser = async (req, res) => {
   const id = req.params.id;
-  const { currentUserId, _id, currentUserAdminStatus, password } = req.body;
+  const { _id, currentUserAdmin, password } = req.body;
 
-  if (id === currentUserId || currentUserAdminStatus) {
+  if (id === _id) {
     try {
       if (password) {
-        const salt = await bcrypt.genSalt(11);
+        const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(password, salt);
       }
-
+      //change this
       const user = await UserModel.findByIdAndUpdate(id, req.body, {
         new: true,
       });
-
-      res.status(200).json({ message: "✅ user updated.", info: user });
+      const token = jwt.sign(
+        { username: user.username, id: user._id },
+        process.env.JWT_KEY,
+        { expiresIn: "168h" }
+      );
+      res.status(200).json({ user, token });
     } catch (error) {
-      res
-        .status(400)
-        .json({ message: "❌ user not updated:", error: error.message });
+      console.log("❌catch password reset usercontroller");
+      res.status(500).json(error);
     }
   } else {
-    res.status(403).json({ message: "❌ Acces denied."})
+    res
+      .status(403)
+      .json("❌Access Denied! You can update only your own Account.");
   }
 };
 
@@ -69,12 +75,15 @@ export const deleteUser = async (req, res) => {
   if (currentUserId === id || currentUserAdmin) {
     try {
       await UserModel.findByIdAndDelete(id);
-      res.status(200).json({ message: "✅ user deleted successfully."})
+      res.status(200).json({ message: "✅ user deleted successfully." });
     } catch (error) {
-      res.status(500).json({ message: "❌ user could not be deleted:", error: error.message });
+      res.status(500).json({
+        message: "❌ user could not be deleted:",
+        error: error.message,
+      });
     }
   } else {
-    res.status(403).json({ message: "❌ delete access denied."})
+    res.status(403).json({ message: "❌ delete access denied." });
   }
 };
 
@@ -83,7 +92,7 @@ export const followUser = async (req, res) => {
   const id = req.params.id;
   const { _id } = req.body;
   if (_id == id) {
-    res.status(403).json({message:"❌ Action Forbidden"});
+    res.status(403).json({ message: "❌ Action Forbidden" });
   } else {
     try {
       const followUser = await UserModel.findById(id);
@@ -92,13 +101,21 @@ export const followUser = async (req, res) => {
       if (!followUser.followers.includes(_id)) {
         await followUser.updateOne({ $push: { followers: _id } });
         await followingUser.updateOne({ $push: { following: id } });
-        res.status(200).json({messsage: "✅ User followed!",followUser:followUser,followingUser:followingUser});
+        res.status(200).json({
+          messsage: "✅ User followed!",
+          followUser: followUser,
+          followingUser: followingUser,
+        });
       } else {
-        res.status(403).json({messsage: "❌ you are already following this id"});
+        res
+          .status(403)
+          .json({ messsage: "❌ you are already following this id" });
       }
     } catch (error) {
-      console.log(error)
-      res.status(500).json({ message: "❌ follow user catch.", error: error.message })
+      console.log(error);
+      res
+        .status(500)
+        .json({ message: "❌ follow user catch.", error: error.message });
     }
   }
 };
@@ -108,27 +125,29 @@ export const unfollowUser = async (req, res) => {
   const id = req.params.id;
   const { _id } = req.body;
 
-  if(_id === id)
-  {
-    res.status(403).json("Action Forbidden")
-  }
-  else{
+  if (_id === id) {
+    res.status(403).json("Action Forbidden");
+  } else {
     try {
-      const unFollowUser = await UserModel.findById(id)
-      const unFollowingUser = await UserModel.findById(_id)
+      const unFollowUser = await UserModel.findById(id);
+      const unFollowingUser = await UserModel.findById(_id);
 
-
-      if (unFollowUser.followers.includes(_id))
-      {
-        await unFollowUser.updateOne({$pull : {followers: _id}})
-        await unFollowingUser.updateOne({$pull : {following: id}})
-        res.status(200).json({message:"✅ Unfollowed Successfully!",followUser:followUser,followingUser:followingUser})
-      }
-      else{
-        res.status(403).json({message:"❌ You are not following this User"})
+      if (unFollowUser.followers.includes(_id)) {
+        await unFollowUser.updateOne({ $pull: { followers: _id } });
+        await unFollowingUser.updateOne({ $pull: { following: id } });
+        res.status(200).json({
+          message: "✅ Unfollowed Successfully!",
+          followUser: followUser,
+          followingUser: followingUser,
+        });
+      } else {
+        res.status(403).json({ message: "❌ You are not following this User" });
       }
     } catch (error) {
-      res.status(500).json({ message: "❌ could not unfollow catch:", error: error.message })
+      res.status(500).json({
+        message: "❌ could not unfollow catch:",
+        error: error.message,
+      });
     }
   }
 };

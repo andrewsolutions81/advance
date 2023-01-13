@@ -22,7 +22,7 @@ export default function Post({ data }) {
   }
 
   return (
-    <div className="Post">
+    <div className="Post" key={data.image}>
       <img
         src={
           data.image

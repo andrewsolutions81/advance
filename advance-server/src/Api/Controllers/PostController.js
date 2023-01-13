@@ -103,8 +103,8 @@ export const likePost = async (req, res) => {
 
 /* timeline posts */
 export const getTimelinePosts = async (req, res) => {
+  const userId = req.params.id
   try {
-    const userId = req.params.id;
     const currentUserPosts = await PostModel.find({ userId: userId });
 
     const followingPosts = await UserModel.aggregate([
@@ -129,15 +129,14 @@ export const getTimelinePosts = async (req, res) => {
       },
     ]);
 
-    const recentPosts = currentUserPosts
-      .concat(...followingPosts[0].followingPosts)
-      .sort((a, b) => {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
-    res.status(200).json(recentPosts);
+    res.status(200).json(
+      currentUserPosts
+        .concat(...followingPosts[0].followingPosts)
+        .sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        })
+    );
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "❌ error in timeline posts:", error: error.message });
+    res.status(500).json("postController -> getTimelinePosts",error);
   }
 };

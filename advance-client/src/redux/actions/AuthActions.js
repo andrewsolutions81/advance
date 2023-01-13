@@ -1,23 +1,30 @@
 import * as AuthApi from "../../api/authRequests.js";
 
-export const logIn = (FormData) => async(dispatch) => {
+export const logIn = (formData, navigate) => async (dispatch) => {
+  dispatch({ type: "AUTH_START" });
   try {
-    dispatch({ type: "AUTH_START" })
-    const {data} = await AuthApi.logIn(FormData)
+    const { data } = await AuthApi.logIn(formData);
     dispatch({ type: "AUTH_SUCCESS", data: data });
+    navigate("../home", { replace: true });
   } catch (error) {
-    console.log("❌ AuthActions logIn error:", error)
     dispatch({ type: "AUTH_FAIL" });
+    console.log("AuthActions -> logIn",error);
   }
-}
+};
 
-export const signUp = (FormData) => async(dispatch) => {
+export const signUp = (formData, navigate) => async (dispatch) => {
+  dispatch({ type: "AUTH_START" });
   try {
-    dispatch({ type: "AUTH_START" })
-    const {data} = await AuthApi.signUp(FormData)
+    const { data } = await AuthApi.signUp(formData);
     dispatch({ type: "AUTH_SUCCESS", data: data });
+    navigate("../home", { replace: true });
   } catch (error) {
-    console.log("❌ AuthActions signUp error:", error)
     dispatch({ type: "AUTH_FAIL" });
+    console.log("AuthActions -> signUp".error);
   }
+};
+
+
+export const logout = ()=> async(dispatch)=> {
+  dispatch({type: "LOG_OUT"})
 }
