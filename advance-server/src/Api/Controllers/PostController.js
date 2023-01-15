@@ -137,6 +137,6 @@ export const getTimelinePosts = async (req, res) => {
         })
     );
   } catch (error) {
-    res.status(500).json("postController -> getTimelinePosts",error);
+    res.status(500).json("postController getTimelinePosts",error);
   }
 };

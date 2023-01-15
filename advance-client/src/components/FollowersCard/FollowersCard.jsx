@@ -14,10 +14,6 @@ const FollowersCard = ({ location }) => {
     const fetchPersons = async () => {
       const { data } = await getAllUser();
       setPersons(data);
-      console.log(
-        "🚀 ~ file: FollowersCard.jsx:20 ~ fetchPersons ~ data",
-        data
-      );
     };
     fetchPersons();
   }, []);

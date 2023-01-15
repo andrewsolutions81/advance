@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as UserApi from "../../api/UserRequests.js";
-import { logout } from "../../redux/actions/AuthActions.js";
+import { logout } from "../../redux/actions/AuthActions";
 import ProfileModal from "../ProfileModal/ProfileModal";
 import "./InfoCard.css";
 
@@ -29,8 +29,10 @@ export default function InfoCard() {
     fetchProfileUser();
   }, [user]);
 
-  const handleLogout = () => dispatch(logout)
-console.log(profileUser.worksAt)
+  const handleLogOut = ()=> {
+    dispatch(logout())
+  }
+
   return (
     <div className="InfoCard">
       <header className="infoHead">
@@ -66,7 +68,9 @@ console.log(profileUser.worksAt)
         </span>
         <span>{profileUser.worksAt}</span>
       </section>
-      <button className="button logout-button" onClick={handleLogout}>Logout</button>
+      <button className="button logout-button" onClick={handleLogOut}>
+        Logout
+      </button>
     </div>
   );
 }
