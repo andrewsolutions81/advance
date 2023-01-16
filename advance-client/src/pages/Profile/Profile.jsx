@@ -2,7 +2,6 @@ import React from 'react'
 import ProfileLeft from '../../components/ProfileLeft/ProfileLeft'
 import ProfileCard from '../../components/ProfileCard/ProfileCard'
 import PostSide from '../../components/PostSide/PostSide'
-import RightSide from '../../components/RightSide/RightSide.jsx'
 import "./Profile.css"
 
 export default function Profile() {
@@ -13,7 +12,6 @@ export default function Profile() {
         <ProfileCard location="profilePage"/>
         <PostSide/>
       </div>
-      <RightSide/>
     </div>
   )
 }

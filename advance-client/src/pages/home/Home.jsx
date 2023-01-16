@@ -9,8 +9,6 @@ export default function Home() {
     <div className="home">
       <ProfileSide/>
       <PostSide/>
-      <RightSide/>
-      <div className="rightSide">rightside</div>
     </div>
   )
 }

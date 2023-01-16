@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Cover from "../../img/cover.jpg";
-import Profile from "../../img/profileImg.jpg";
 import { useSelector } from "react-redux";
 import "./ProfileCard.css";
 
@@ -10,7 +8,6 @@ export default function ProfileCard({location}) {
   const posts = useSelector((state) => state.postReducer.posts)
   const $url = process.env.REACT_APP_PUBLIC_FOLDER;
 
-  const ProfilePage = false;
   return (
     <div className="ProfileCard">
       <main className="ProfileImages">
@@ -69,11 +66,14 @@ export default function ProfileCard({location}) {
       {location === "profilePage" ? (
         ""
       ) : (
+        <>
         <span className="my-profile">
           <Link to={`/profile/${user._id}`}>
             My Profile
           </Link>
         </span>
+
+        </>
       )}
     </div>
   );
