@@ -8,8 +8,7 @@ import { useSelector } from "react-redux";
 import { likePost } from "../../api/PostsRequests";
 
 export default function Post({ data }) {
-  const url = "http://localhost:8080/images/"
-  // const url = process.env.REACT_APP_PUBLIC_FOLDER
+  const url = process.env.REACT_APP_PUBLIC_FOLDER
   const { user } = useSelector((state) => state.authReducer.authData);
   const [liked, setLiked] = useState(data.likes.includes(user._id));
   const [likes, setLikes] = useState(data.likes.length)
