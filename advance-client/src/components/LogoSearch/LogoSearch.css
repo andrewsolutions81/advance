@@ -1,0 +1,41 @@
+.LogoSearch{
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.logoSearchContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+
+.LogoSearch-logo{
+  padding: 5%;
+}
+
+.Search{
+  display: flex;
+  border-radius: 5%;
+  background-color: var(--inputColor);
+  border: 15px;
+  padding: 5px;
+}
+
+.LogoSearch-input{
+  background-color: transparent ;
+  border: none;
+  outline: none;
+}
+
+.search-icon{
+  cursor: pointer;
+  padding: 3px;
+}
+
+.shareBtnInLogosearch{
+gap:1rem;
+margin-left: 20%;
+}
