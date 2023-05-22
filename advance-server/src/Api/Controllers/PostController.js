@@ -5,6 +5,7 @@ import UserModel from "../Models/userModel.js";
 /* create post */
 export const createPost = async (req, res) => {
   const newPost = new PostModel(req.body);
+  // pasos para de forma async cambiar del modelo la imagen por la url que me devluelven
   try {
     await newPost.save();
     res.status(201).json(newPost);
@@ -14,6 +15,18 @@ export const createPost = async (req, res) => {
       .json({ message: "❌ could not create post:", error: error.message });
   }
 };
+// /* create post */
+// export const createPost = async (req, res) => {
+//   const newPost = new PostModel(req.body);
+//   try {
+//     await newPost.save();
+//     res.status(201).json(newPost);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "❌ could not create post:", error: error.message });
+//   }
+// };
 
 /* get a single post */
 export const getPost = async (req, res) => {

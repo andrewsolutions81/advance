@@ -35,7 +35,7 @@ const PostShare = () => {
     }
     if(image){
       const data =  new FormData()
-      const filename = Date.now() + image.name
+      const filename = Date.now() + image.name //cloudinary id
       data.append("name",filename)
       data.append("file", image)
       newPost.image = filename
