@@ -1,10 +1,11 @@
+//Posts.jsx
+import "./Posts.css";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getTimelinePosts } from "../../redux/actions/postAction.js";
 import Post from "../Post/Post.jsx";
-import "./Posts.css";
 
 export default function Posts() {
   const params = useParams()
