@@ -1,3 +1,5 @@
+// @ts-nocheck
+//PostShare.jsx
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost } from "../../redux/actions/uploadAction";
@@ -27,6 +29,13 @@ const PostShare = () => {
 
   const handleCloseUpload = ()=> setImage(null)
 
+  const resetShare = () => {
+    setImage(null);
+    desc.current.value = "";
+  };
+
+  // Fix handleSubmit /////////////////////////////
+
   const handleSubmit = (e)=>{
     e.preventDefault()
     const newPost = {
@@ -34,25 +43,23 @@ const PostShare = () => {
       desc: desc.current.value
     }
     if(image){
-      const data =  new FormData()
-      const filename = Date.now() + image.name //cloudinary id
-      data.append("name",filename)
-      data.append("file", image)
-      newPost.image = filename
       try {
+      const data =  new FormData()
+      const filename = Date.now() + image.name
+      data.append("name",filename)
+      data.append("image", image)
+      newPost.image = filename
         dispatch(uploadImage(data))
       } catch (error) {
-        console.log("PostShare handleSubmit error:", error)
+        console.log(`PostShare handleSubmit error: ${error}`)
+        alert(error)
       }
     }
     dispatch(uploadPost(newPost));
     resetShare();
   }
 
-  const resetShare = () => {
-    setImage(null);
-    desc.current.value = "";
-  };
+//////////////////////////////////////////////////
 
   return (
     <div className="PostShare">

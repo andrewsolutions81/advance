@@ -1,3 +1,4 @@
+//ReduxStore.js
 import {
   legacy_createStore as createStore,
   applyMiddleware,
