@@ -1,3 +1,4 @@
+// postModel.js
 import mongoose from "mongoose";
 
 const postSchema = mongoose.Schema(
@@ -15,7 +16,8 @@ const postSchema = mongoose.Schema(
       type: Date,
       default: new Date(),
     },
-    image: String,
+    "imageName": String,
+    "imageUrl": String,
   },
   {
     timestamps: true,
